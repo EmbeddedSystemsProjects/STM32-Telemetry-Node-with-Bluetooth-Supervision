@@ -25,26 +25,6 @@ The HC-05 serial connection is configured for **9600 bit/s, 8-N-1**. Use a commo
 - The HC-05 forwards the UART data to the Android application using Bluetooth Classic SPP.
 - The Android app parses incoming records, displays live measurements, and stores them in a local SQLite database.
 
-## Build and run
-
-**STM32 firmware**
-1. Open the firmware project in STM32CubeIDE.
-2. Check the target, pin assignments, and peripheral configuration.
-3. Build and flash the firmware to the NUCLEO-F401RE using ST-LINK.
-
-**Android application**
-1. Open the Android project in Android Studio and sync Gradle.
-2. Build and install the app on an Android device supporting Bluetooth Classic.
-3. Pair the phone with the HC-05 in Android Bluetooth settings, then connect from the app.
-
-## Notes and limitations
-
-- The 100-iteration decimation and relative `osDelay(10)` do not define an exact one-second period; execution and scheduling time also contribute.
-- The MPU6050 conversion assumes the ±2 g sensitivity, but the firmware does not explicitly program the full-scale register.
-- The DS18B20 driver reads the temperature bytes but does not validate the scratchpad CRC.
-- Queue insertion and UART transmission failures do not currently trigger an application-level retry or diagnostic counter.
-- Bluetooth end-to-end latency and task-level scheduling jitter have not been measured.
-
 An offline analysis of the stored records found an average interval of approximately **1108.67 ms** between regular telemetry records (about **0.902 records/s**) in the analysed sessions. This describes record timing, not the raw sensor sampling frequency or Bluetooth latency.
 
 ## Possible improvements
