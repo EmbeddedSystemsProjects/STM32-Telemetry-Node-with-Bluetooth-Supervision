@@ -1,10 +1,52 @@
-# Project Template
+# Distributed Monitoring System
 
-This repository serves as a template for students to use as a starting point for creating their project repositories. 
+STM32-based telemetry node with Bluetooth communication and an Android application for local sensor monitoring.
 
-## Instructions
-1. Create a new repository in the EmbeddedSystemsProjects organization using this repo as the template.
-2. Customize it to fit the needs of your project.
-3. Replace this README with details specific to your project.
+## Overview
 
-Happy coding!
+The project uses an **STM32F401RE** running **FreeRTOS** to acquire data from an **MPU6050** accelerometer and a **DS18B20** temperature sensor. Measurements are sent through an **HC-05 Bluetooth module** to an Android application, which displays live data and stores records locally in **SQLite**. No cellular connection or cloud broker is required for local monitoring.
+
+## Hardware
+
+| Component | Function | STM32 connection |
+|---|---|---|
+| MPU6050 | 3-axis acceleration | I2C1: PB8 (SCL), PB9 (SDA) |
+| DS18B20 | Digital temperature | PA8: software 1-Wire GPIO |
+| HC-05 | Bluetooth Classic SPP | USART1: PA9 (TX), PA10 (RX) |
+
+The HC-05 serial connection is configured for **9600 bit/s, 8-N-1**. Use a common ground and check the voltage requirements of each sensor breakout and Bluetooth board. The DS18B20 1-Wire data line requires a pull-up resistor (commonly 4.7 kΩ).
+
+## Firmware and data flow
+
+- FreeRTOS separates sensor acquisition and UART transmission into two tasks.
+- MPU6050 acceleration data is smoothed with a moving average using circular buffers of up to 32 samples per axis.
+- The DS18B20 is driven through a software 1-Wire implementation. DWT timing is used for microsecond-scale bus operations.
+- A FreeRTOS queue stores up to 10 telemetry packets. A packet is generated every 100 sensor-task iterations.
+- The HC-05 forwards the UART data to the Android application using Bluetooth Classic SPP.
+- The Android app parses incoming records, displays live measurements, and stores them in a local SQLite database.
+
+## Build and run
+
+**STM32 firmware**
+1. Open the firmware project in STM32CubeIDE.
+2. Check the target, pin assignments, and peripheral configuration.
+3. Build and flash the firmware to the NUCLEO-F401RE using ST-LINK.
+
+**Android application**
+1. Open the Android project in Android Studio and sync Gradle.
+2. Build and install the app on an Android device supporting Bluetooth Classic.
+3. Pair the phone with the HC-05 in Android Bluetooth settings, then connect from the app.
+
+## Notes and limitations
+
+- The 100-iteration decimation and relative `osDelay(10)` do not define an exact one-second period; execution and scheduling time also contribute.
+- The MPU6050 conversion assumes the ±2 g sensitivity, but the firmware does not explicitly program the full-scale register.
+- The DS18B20 driver reads the temperature bytes but does not validate the scratchpad CRC.
+- Queue insertion and UART transmission failures do not currently trigger an application-level retry or diagnostic counter.
+- Bluetooth end-to-end latency and task-level scheduling jitter have not been measured.
+
+An offline analysis of the stored records found an average interval of approximately **1108.67 ms** between regular telemetry records (about **0.902 records/s**) in the analysed sessions. This describes record timing, not the raw sensor sampling frequency or Bluetooth latency.
+
+## Possible improvements
+
+CRC validation, explicit sensor configuration, improved queue/UART error handling, timing instrumentation, Bluetooth reconnection, and enhanced Android data management.
