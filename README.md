@@ -13,7 +13,7 @@ No cellular connection or cloud broker is required for local monitoring.
 ## System Architecture
 
 <p align="center">
-  <img src="images/schemacps(1).jpg" alt="Systmarchitecture" width="850">
+  <img src="images/schemacps.jpg" alt="Systmarchitecture" width="850">
 </p>
 
 The STM32 acquires and processes sensor data, then forwards telemetry through Bluetooth Classic to the Android application for live monitoring and local storage.
