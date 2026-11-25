@@ -1,0 +1,3 @@
+../Core/Src/mpu6050.c:13:20:MPU6050_Init	40	static
+../Core/Src/mpu6050.c:46:7:MPU6050_SampleTask	40	static
+../Core/Src/mpu6050.c:81:10:MPU6050_GetFilteredData	48	static

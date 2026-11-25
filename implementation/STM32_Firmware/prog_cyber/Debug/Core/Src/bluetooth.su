@@ -1,0 +1,2 @@
+../Core/Src/bluetooth.c:21:6:BT_Init	16	static
+../Core/Src/bluetooth.c:25:19:BT_SendPacket	88	static

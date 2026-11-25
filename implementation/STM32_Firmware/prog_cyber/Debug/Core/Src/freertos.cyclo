@@ -1,0 +1,4 @@
+../Core/Src/freertos.c:82:6:vApplicationGetIdleTaskMemory	1
+../Core/Src/freertos.c:95:6:MX_FREERTOS_Init	1
+../Core/Src/freertos.c:128:6:StartSensorTask	13
+../Core/Src/freertos.c:240:6:StartBluetoothTask	3

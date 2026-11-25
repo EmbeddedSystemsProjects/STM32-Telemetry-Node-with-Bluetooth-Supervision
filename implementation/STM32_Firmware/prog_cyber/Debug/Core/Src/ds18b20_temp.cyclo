@@ -1,0 +1,9 @@
+../Core/Src/ds18b20_temp.c:12:6:DS18B20_init	1
+../Core/Src/ds18b20_temp.c:22:13:delay_us	4
+../Core/Src/ds18b20_temp.c:43:16:DS18B20_Reset	2
+../Core/Src/ds18b20_temp.c:67:13:DS18B20_WriteBit	2
+../Core/Src/ds18b20_temp.c:85:16:DS18B20_ReadBit	2
+../Core/Src/ds18b20_temp.c:101:13:DS18B20_WriteByte	2
+../Core/Src/ds18b20_temp.c:109:16:DS18B20_ReadByte	3
+../Core/Src/ds18b20_temp.c:123:9:DS18B20_StartConversion	2
+../Core/Src/ds18b20_temp.c:134:7:DS18B20_ReadTemperature	2
